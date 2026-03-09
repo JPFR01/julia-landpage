@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JulIA | A Secretária Digital da sua Clínica</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism */
+        .glass {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+        }
+
+        .glass-dark {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .gradient-bg {
+            background: radial-gradient(circle at top left, #eef2ff 0%, #f3e8ff 40%, #ffffff 100%);
+        }
+
+        /* Animações Personalizadas */
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .blob-shape {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.3) 0%, rgba(168, 85, 247, 0.3) 100%);
+            filter: blur(80px);
+            z-index: -1;
+            border-radius: 50%;
+            opacity: 0.6;
+        }
+
+        /* Chat Message Animation */
+        .msg-appear {
+            animation: slideUpFade 0.5s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        @keyframes slideUpFade {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Mobile Menu Transition */
+        #mobile-menu {
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+
+        .menu-hidden {
+            transform: translateY(-20px);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .menu-visible {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+    </style>
+</head>
+
+<body class="gradient-bg text-slate-900 selection:bg-indigo-200">
+
+    <!-- Elementos Decorativos de Fundo -->
+    <div class="blob-shape top-[-10%] left-[-20%] w-[300px] h-[300px] md:w-[600px] md:h-[600px] animate-pulse"
+        style="animation-duration: 10s;"></div>
+    <div class="blob-shape bottom-0 right-[-20%] w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-purple-300 animate-pulse"
+        style="animation-duration: 15s;"></div>
+
+    <!-- Navegação -->
+    <nav class="fixed w-full z-50 transition-all duration-300 glass" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <!-- Logo -->
+            <div class="text-2xl font-extrabold tracking-tight cursor-pointer z-50 relative">
+                Jul<span class="text-indigo-600">IA</span>
+            </div>
+
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex space-x-8 font-medium text-sm items-center">
+                <a href="#inicio" class="text-slate-600 hover:text-indigo-600 transition">Início</a>
+                <a href="#funcionalidades" class="text-slate-600 hover:text-indigo-600 transition">Funcionalidades</a>
+                <a href="#planos" class="text-slate-600 hover:text-indigo-600 transition">Planos</a>
+                <!--  <a href="#demo" class="text-slate-600 hover:text-indigo-600 transition">Integração</a> -->
+                <button
+                    class="bg-slate-900 text-white px-6 py-2.5 rounded-full font-bold text-sm hover:bg-indigo-600 transition shadow-lg hover:shadow-indigo-500/30 transform hover:-translate-y-0.5">
+                    Falar com Consultor
+                </button>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-btn"
+                class="md:hidden z-50 p-2 text-slate-700 hover:text-indigo-600 focus:outline-none">
+                <i data-lucide="menu" class="w-8 h-8"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu Overlay -->
+        <div id="mobile-menu"
+            class="absolute top-0 left-0 w-full glass shadow-xl border-b border-white/50 p-6 pt-24 flex flex-col space-y-4 md:hidden menu-hidden z-40">
+            <a href="#inicio"
+                class="text-lg font-semibold text-slate-700 py-2 border-b border-slate-100 mobile-link">Início</a>
+            <a href="#funcionalidades"
+                class="text-lg font-semibold text-slate-700 py-2 border-b border-slate-100 mobile-link">Funcionalidades</a>
+            <a href="#planos"
+                class="text-lg font-semibold text-slate-700 py-2 border-b border-slate-100 mobile-link">Planos</a>
+            <a href="#demo"
+                class="text-lg font-semibold text-slate-700 py-2 border-b border-slate-100 mobile-link">Integração</a>
+            <button class="w-full bg-indigo-600 text-white py-3 rounded-xl font-bold mt-4 shadow-lg">
+                Falar com Consultor
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="inicio"
+        class="relative pt-32 md:pt-40 pb-12 md:pb-20 px-4 md:px-6 min-h-screen flex items-center overflow-x-hidden">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+
+            <!-- Texto Hero -->
+            <div class="text-center lg:text-left order-2 lg:order-1" data-aos="fade-up" data-aos-duration="1000">
+                <div
+                    class="inline-flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-full bg-white border border-indigo-100 shadow-sm mb-6 md:mb-8 mx-auto lg:mx-0">
+                    <span class="relative flex h-3 w-3">
+                        <span
+                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-indigo-500"></span>
+                    </span>
+                    <span class="text-[10px] md:text-xs font-bold text-slate-600 uppercase tracking-wide">Exclusivo para
+                        Saúde</span>
+                </div>
+
+                <h1 class="text-4xl sm:text-5xl md:text-7xl font-extrabold leading-[1.1] mb-6 text-slate-900">
+                    Olá, eu sou a <br>
+                    <span
+                        class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">JulIA</span>.
+                </h1>
+
+                <p class="text-base md:text-xl text-slate-600 mb-8 md:mb-10 leading-relaxed max-w-lg mx-auto lg:mx-0">
+                    Transformo mensagens de WhatsApp em consultas agendadas. Sou a nova secretária digital do seu
+                    consultório: cadastro pacientes e agendo horários 24/7, sem intervenção humana.
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                    <a href="#planos"
+                        class="group bg-indigo-600 text-white px-6 md:px-8 py-3 md:py-4 rounded-2xl text-base md:text-lg font-bold hover:bg-indigo-700 transition shadow-xl shadow-indigo-200 flex items-center justify-center gap-2 w-full sm:w-auto">
+                        Ver Planos
+                        <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+                    <button
+                        class="glass px-6 md:px-8 py-3 md:py-4 rounded-2xl text-base md:text-lg font-bold text-slate-700 hover:bg-white transition flex items-center justify-center gap-2 w-full sm:w-auto">
+                        <i data-lucide="message-circle" class="w-5 h-5 text-indigo-600"></i>
+                        Testar no WhatsApp
+                    </button>
+                </div>
+
+                <div
+                    class="mt-8 md:mt-12 flex items-center justify-center lg:justify-start gap-4 text-xs md:text-sm text-slate-500 font-medium">
+                    <!-- <div class="flex -space-x-2">
+                        <img class="w-8 h-8 rounded-full border-2 border-white" src="https://i.pravatar.cc/100?img=1"
+                            alt="User">
+                        <img class="w-8 h-8 rounded-full border-2 border-white" src="https://i.pravatar.cc/100?img=5"
+                            alt="User">
+                        <img class="w-8 h-8 rounded-full border-2 border-white" src="https://i.pravatar.cc/100?img=8"
+                            alt="User">
+                    </div> -->
+                    <!-- <p>Centenas de clínicas confiam na JulIA</p> -->
+                </div>
+            </div>
+
+            <!-- Avatar / Visual 3D -->
+            <div class="relative flex justify-center perspective-1000 order-1 lg:order-2 mb-8 lg:mb-0"
+                data-aos="zoom-in" data-aos-duration="1200">
+                <!-- Círculos Orbitais -->
+                <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <div
+                        class="w-[300px] h-[300px] md:w-[500px] md:h-[500px] border border-indigo-100 rounded-full animate-[spin_10s_linear_infinite]">
+                    </div>
+                    <div
+                        class="w-[220px] h-[220px] md:w-[350px] md:h-[350px] border border-purple-100 rounded-full absolute animate-[spin_15s_linear_infinite_reverse]">
+                    </div>
+                </div>
+
+                <!-- Main Card -->
+                <div
+                    class="floating relative w-full max-w-[320px] md:max-w-sm h-[400px] md:h-[28rem] glass rounded-[2rem] md:rounded-[2.5rem] shadow-2xl flex flex-col overflow-hidden border border-white/50 z-10 mx-auto">
+                    <!-- Header do Chat -->
+                    <div
+                        class="p-4 md:p-6 border-b border-indigo-50 bg-white/50 flex items-center justify-between backdrop-blur-sm">
+                        <div class="flex items-center gap-3">
+                            <div class="relative">
+                                <div
+                                    class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg md:text-xl shadow-lg">
+                                    J
+                                </div>
+                                <div
+                                    class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full">
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-slate-800 text-sm md:text-base">JulIA Secretária</h3>
+                                <p class="text-[10px] md:text-xs text-indigo-600 font-medium flex items-center gap-1">
+                                    <span class="w-1.5 h-1.5 bg-indigo-600 rounded-full animate-pulse"></span>
+                                    WhatsApp Online
+                                </p>
+                            </div>
+                        </div>
+                        <button class="p-2 hover:bg-slate-100 rounded-full transition"><i data-lucide="phone"
+                                class="text-slate-400 w-5 h-5"></i></button>
+                    </div>
+
+                    <!-- Corpo do Chat (Simulação) -->
+                    <div class="flex-1 p-4 md:p-6 space-y-4 overflow-y-auto relative bg-white/30 scrollbar-hide"
+                        id="chat-container">
+                        <!-- Mensagens via JS -->
+                    </div>
+
+                    <!-- Input Fake -->
+                    <div class="p-3 md:p-4 bg-white/60 border-t border-indigo-50">
+                        <div class="glass flex items-center p-2 md:p-3 rounded-xl gap-2 md:gap-3">
+                            <i data-lucide="plus" class="text-slate-400 w-4 h-4 md:w-5 md:h-5"></i>
+                            <div class="flex-1 text-xs md:text-sm text-slate-400 truncate">Mensagem...</div>
+                            <div
+                                class="w-7 h-7 md:w-8 md:h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white shadow-lg shadow-indigo-200">
+                                <i data-lucide="send" class="w-3 h-3 md:w-4 md:h-4"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Elementos Flutuantes -->
+                <div class="hidden xs:block absolute top-10 -right-2 md:top-20 md:-right-4 glass p-3 md:p-4 rounded-xl md:rounded-2xl shadow-lg animate-[float_4s_ease-in-out_infinite] z-20"
+                    style="animation-delay: 1s;">
+                    <div class="flex items-center gap-2 md:gap-3">
+                        <div class="bg-green-100 p-1.5 md:p-2 rounded-lg text-green-600"><i data-lucide="calendar-check"
+                                class="w-4 h-4 md:w-5 md:h-5"></i></div>
+                        <div>
+                            <p class="text-[10px] md:text-xs text-slate-500 font-bold uppercase">Agendamentos</p>
+                            <p class="text-sm md:text-lg font-bold text-slate-800">Automáticos</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Funcionalidades Grid -->
+    <section id="funcionalidades" class="py-16 md:py-24 relative bg-white/40">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-12 md:mb-20">
+                <h2 class="text-3xl md:text-5xl font-extrabold mb-4 md:mb-6 text-slate-900" data-aos="fade-up">A clínica
+                    não para. A JulIA também não.</h2>
+                <p class="text-base md:text-lg text-slate-500 max-w-2xl mx-auto" data-aos="fade-up"
+                    data-aos-delay="100">
+                    Automatize o atendimento primário do seu consultório e libere sua equipe humana para focar no que
+                    realmente importa: o acolhimento presencial.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+                <!-- Feature 1 -->
+                <div class="glass p-6 md:p-10 rounded-3xl hover:-translate-y-2 transition duration-300 group"
+                    data-aos="fade-up" data-aos-delay="0">
+                    <div
+                        class="w-14 h-14 md:w-16 md:h-16 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600 mb-6 md:mb-8 group-hover:scale-110 transition duration-300 shadow-sm">
+                        <i data-lucide="calendar-clock" class="w-6 h-6 md:w-8 md:h-8"></i>
+                    </div>
+                    <h3 class="text-lg md:text-xl font-bold mb-3 md:mb-4 text-slate-800">Agendamento 24/7 via WhatsApp
+                    </h3>
+                    <p class="text-sm md:text-base text-slate-600 leading-relaxed">Os próprios pacientes agendam,
+                        remarcam ou cancelam consultas diretamente pelo WhatsApp, sem precisar de intervenção de uma
+                        secretária.</p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="glass p-6 md:p-10 rounded-3xl hover:-translate-y-2 transition duration-300 group border-t-4 border-indigo-600 relative overflow-hidden"
+                    data-aos="fade-up" data-aos-delay="150">
+                    <div class="absolute top-0 right-0 p-4 opacity-10">
+                        <i data-lucide="database" class="w-20 h-20 md:w-24 md:h-24 rotate-12"></i>
+                    </div>
+                    <div
+                        class="w-14 h-14 md:w-16 md:h-16 bg-purple-50 rounded-2xl flex items-center justify-center text-purple-600 mb-6 md:mb-8 group-hover:scale-110 transition duration-300 shadow-sm">
+                        <i data-lucide="user-plus" class="w-6 h-6 md:w-8 md:h-8"></i>
+                    </div>
+                    <h3 class="text-lg md:text-xl font-bold mb-3 md:mb-4 text-slate-800">Cadastro Automático no Sistema
+                    </h3>
+                    <p class="text-sm md:text-base text-slate-600 leading-relaxed">A JulIA coleta os dados do paciente
+                        durante a conversa e faz o cadastro autônomo diretamente no seu sistema de gestão médica.</p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="glass p-6 md:p-10 rounded-3xl hover:-translate-y-2 transition duration-300 group"
+                    data-aos="fade-up" data-aos-delay="300">
+                    <div
+                        class="w-14 h-14 md:w-16 md:h-16 bg-teal-50 rounded-2xl flex items-center justify-center text-teal-600 mb-6 md:mb-8 group-hover:scale-110 transition duration-300 shadow-sm">
+                        <i data-lucide="info" class="w-6 h-6 md:w-8 md:h-8"></i>
+                    </div>
+                    <h3 class="text-lg md:text-xl font-bold mb-3 md:mb-4 text-slate-800">Dúvidas sobre Convênios e
+                        Preços</h3>
+                    <p class="text-sm md:text-base text-slate-600 leading-relaxed">Responde instantaneamente dúvidas
+                        comuns sobre valores de consultas particulares, planos de saúde aceitos e preparos para exames.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Planos Section -->
+    <section id="planos" class="py-16 md:py-24 relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-12 md:mb-16">
+                <h2 class="text-3xl md:text-5xl font-extrabold mb-4 md:mb-6 text-slate-900" data-aos="fade-up">Planos
+                    sob medida para o seu consultório</h2>
+                <p class="text-base md:text-lg text-slate-500 max-w-2xl mx-auto" data-aos="fade-up"
+                    data-aos-delay="100">
+                    Automatize seu atendimento sem pesar no orçamento da clínica.
+                </p>
+            </div>
+
+            <div class="flex justify-center" data-aos="fade-up" data-aos-delay="200">
+                <!-- Cartão de Preço Principal -->
+                <div
+                    class="relative w-full max-w-lg glass rounded-[2rem] p-8 md:p-10 border-2 border-indigo-500 shadow-2xl shadow-indigo-200">
+                    <div
+                        class="absolute -top-5 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wide shadow-lg w-max max-w-full text-center">
+                        Ideal para Consultórios
+                    </div>
+
+                    <div class="text-center mb-8">
+                        <h3 class="text-2xl font-bold text-slate-800 mb-2 mt-4 md:mt-0">Plano Inicial</h3>
+                        <div class="flex items-center justify-center gap-1">
+                            <span class="text-xl font-bold text-slate-500">R$</span>
+                            <span class="text-5xl md:text-6xl font-extrabold text-slate-900 tracking-tight">199</span>
+                            <span class="text-slate-500 font-medium">/mês</span>
+                        </div>
+                        <p class="text-slate-500 mt-4 text-sm">Tudo o que você precisa para ter uma secretária digital
+                            operando 24 horas por dia.</p>
+                    </div>
+
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="check-circle-2" class="w-6 h-6 text-green-500 shrink-0"></i>
+                            <span class="text-slate-700 font-medium text-sm md:text-base">Agendamento autônomo de
+                                consultas via WhatsApp</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="check-circle-2" class="w-6 h-6 text-green-500 shrink-0"></i>
+                            <span class="text-slate-700 font-medium text-sm md:text-base">Cadastro automático de
+                                pacientes no seu sistema de gestão</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="check-circle-2" class="w-6 h-6 text-green-500 shrink-0"></i>
+                            <span class="text-slate-700 font-medium text-sm md:text-base">Respostas sobre preços, planos
+                                de saúde e convênios aceitos</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="check-circle-2" class="w-6 h-6 text-green-500 shrink-0"></i>
+                            <span class="text-slate-700 font-medium text-sm md:text-base">Atendimento humanizado 24
+                                horas, 7 dias por semana</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="check-circle-2" class="w-6 h-6 text-green-500 shrink-0"></i>
+                            <span class="text-slate-700 font-medium text-sm md:text-base">Zero intervenção de secretária
+                                humana para tarefas repetitivas</span>
+                        </li>
+                    </ul>
+
+                    <button
+                        class="w-full bg-slate-900 text-white py-4 rounded-xl text-lg font-bold hover:bg-indigo-600 transition shadow-lg hover:shadow-indigo-500/30">
+                        Assinar Agora
+                    </button>
+                    <p class="text-center text-xs text-slate-400 mt-4">Cancele quando quiser. Sem taxa de setup.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section id="demo" class="py-16 md:py-24 bg-slate-900 text-white relative overflow-hidden">
+        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10">
+        </div>
+        <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent to-slate-900/90 z-0"></div>
+
+        <!-- <div class="max-w-7xl mx-auto px-6 relative z-10 flex flex-col md:flex-row items-center gap-12 md:gap-16">
+            <div class="flex-1 text-center md:text-left" data-aos="fade-right">
+                <h2 class="text-3xl md:text-5xl font-extrabold mb-4 md:mb-6">Integração com seu <br><span
+                        class="text-indigo-400">Sistema Atual</span>.</h2>
+                <p class="text-slate-400 text-base md:text-lg mb-8 leading-relaxed">
+                    Não jogue seu software fora. A JulIA se conecta diretamente com a agenda do seu sistema de gestão de
+                    clínicas atual.
+                </p>
+
+                <div class="space-y-4 text-left">
+                    <div
+                        class="flex items-center gap-3 md:gap-4 bg-white/5 p-3 md:p-4 rounded-xl border border-white/10">
+                        <div class="bg-green-500/20 p-1.5 md:p-2 rounded-full text-green-400"><i data-lucide="check"
+                                class="w-4 h-4 md:w-5 md:h-5"></i></div>
+                        <span class="font-medium text-sm md:text-base">Integração oficial WhatsApp API</span>
+                    </div>
+                    <div
+                        class="flex items-center gap-3 md:gap-4 bg-white/5 p-3 md:p-4 rounded-xl border border-white/10">
+                        <div class="bg-green-500/20 p-1.5 md:p-2 rounded-full text-green-400"><i data-lucide="check"
+                                class="w-4 h-4 md:w-5 md:h-5"></i></div>
+                        <span class="font-medium text-sm md:text-base">Compatível com Doctoralia, Feegow, iClinic e
+                            mais</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex-1 w-full" data-aos="fade-left">
+                <div
+                    class="bg-[#1e293b] rounded-xl overflow-hidden shadow-2xl border border-slate-700 font-mono text-xs md:text-sm">
+                    <div class="bg-slate-800 px-4 py-3 flex items-center gap-2 border-b border-slate-700">
+                        <div class="flex gap-1.5">
+                            <div class="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-red-500"></div>
+                            <div class="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-yellow-500"></div>
+                            <div class="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-green-500"></div>
+                        </div>
+                        <span class="ml-4 text-slate-400">webhook-clinica.js</span>
+                    </div>
+                    <div class="p-4 md:p-6 text-slate-300 leading-loose overflow-x-auto">
+                        <p><span class="text-blue-400">const</span> <span class="text-yellow-300">julIA</span> = <span
+                                class="text-blue-400">new</span> JulIAMedical({</p>
+                        <p class="pl-4">apiKey: <span class="text-green-400">process.env.JULIA_API</span>,</p>
+                        <p class="pl-4">systemIntegration: <span class="text-green-400">'iclinic'</span>,</p>
+                        <p class="pl-4">autoSchedule: <span class="text-orange-400">true</span>,</p>
+                        <p class="pl-4">acceptedInsurance: [<span class="text-green-400">'Unimed'</span>, <span
+                                class="text-green-400">'Bradesco'</span>, <span
+                                class="text-green-400">'SulAmérica'</span>]</p>
+                        <p>});</p>
+                        <br>
+                        <p><span class="text-slate-500">// Inicia atendimento automático 24/7 no WhatsApp</span></p>
+                        <p><span class="text-yellow-300">julIA</span>.<span
+                                class="text-blue-300">startWhatsAppListener</span>();</p>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 pt-12 md:pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-8 md:mb-12">
+                <div class="text-3xl font-extrabold tracking-tight mb-6 md:mb-0">
+                    Jul<span class="text-indigo-600">IA</span>
+                </div>
+                <div class="flex gap-6">
+                    <a href="#"
+                        class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center hover:bg-indigo-600 hover:text-white transition"><i
+                            data-lucide="instagram" class="w-5 h-5"></i></a>
+                    <a href="#"
+                        class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center hover:bg-indigo-600 hover:text-white transition"><i
+                            data-lucide="facebook" class="w-5 h-5"></i></a>
+                    <a href="#"
+                        class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center hover:bg-indigo-600 hover:text-white transition"><i
+                            data-lucide="linkedin" class="w-5 h-5"></i></a>
+                </div>
+            </div>
+            <div class="text-center text-slate-400 text-xs md:text-sm">
+                &copy; 2026 JulIA Automação para Clínicas. Todos os direitos reservados.
+            </div>
+            <div class="text-center text-slate-400 text-xs md:text-sm">
+                JulIA é um produto Steins LTDA.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Init Icons
+        lucide.createIcons();
+
+        // Init AOS
+        AOS.init({
+            once: true,
+            offset: 50,
+            duration: 800,
+        });
+
+        // Mobile Menu Logic
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+        let isMenuOpen = false;
+
+        menuBtn.addEventListener('click', () => {
+            isMenuOpen = !isMenuOpen;
+            if (isMenuOpen) {
+                mobileMenu.classList.remove('menu-hidden');
+                mobileMenu.classList.add('menu-visible');
+            } else {
+                mobileMenu.classList.add('menu-hidden');
+                mobileMenu.classList.remove('menu-visible');
+            }
+        });
+
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                isMenuOpen = false;
+                mobileMenu.classList.add('menu-hidden');
+                mobileMenu.classList.remove('menu-visible');
+            });
+        });
+
+        // Chat Simulation Script - CLINIC SCENARIO
+        const chatContainer = document.getElementById('chat-container');
+
+        const conversation = [
+            { type: 'bot', text: 'Olá! Sou a JulIA, assistente virtual da clínica. Como posso te ajudar hoje?', delay: 800 },
+            { type: 'user', text: 'Queria agendar uma consulta.', delay: 2500 },
+            { type: 'bot', text: 'Com certeza! Posso realizar o agendamento agora mesmo. Você possui algum convênio?', delay: 4000 },
+            { type: 'user', text: 'Sim, aceitam Unimed?', delay: 6000 },
+            { type: 'bot', text: 'Aceitamos Unimed sim! Tenho horários disponíveis amanhã às 14h ou 16h com o Dr. Carlos. Qual você prefere?', delay: 7500 },
+            { type: 'user', text: 'Pode ser às 14h. Qual o preço se fosse particular?', delay: 9500 },
+            { type: 'bot', text: 'Agendado para amanhã às 14h! O valor da consulta particular seria R$ 250. Já enviei a confirmação para o seu sistema e seu cadastro está feito! ✅', delay: 11000 }
+        ];
+
+        function createMessage(text, type) {
+            const div = document.createElement('div');
+            div.className = `flex w-full mb-4 ${type === 'user' ? 'justify-end' : 'justify-start'} msg-appear`;
+
+            let content = '';
+            if (type === 'bot') {
+                content = `
+                    <div class="w-6 h-6 md:w-8 md:h-8 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-600 flex-shrink-0 flex items-center justify-center text-white text-[10px] md:text-xs font-bold mr-2 mt-1 shadow-md">J</div>
+                    <div class="bg-white p-2 md:p-3 rounded-2xl rounded-tl-none shadow-sm text-xs md:text-sm text-slate-700 max-w-[85%] border border-slate-100 leading-relaxed">
+                        ${text}
+                    </div>
+                `;
+            } else {
+                content = `
+                    <div class="bg-green-600 p-2 md:p-3 rounded-2xl rounded-tr-none shadow-md text-xs md:text-sm text-white max-w-[85%] leading-relaxed">
+                        ${text}
+                    </div>
+                `;
+            }
+
+            div.innerHTML = content;
+            return div;
+        }
+
+        function runChatSimulation() {
+            chatContainer.innerHTML = ''; // Reset
+            conversation.forEach(msg => {
+                setTimeout(() => {
+                    const msgElement = createMessage(msg.text, msg.type);
+                    chatContainer.appendChild(msgElement);
+                    chatContainer.scrollTop = chatContainer.scrollHeight;
+                }, msg.delay);
+            });
+        }
+
+        window.addEventListener('load', runChatSimulation);
+        // Restart loop after finishing conversation
+        setInterval(runChatSimulation, 15000);
+
+    </script>
+</body>
+
+</html>
